@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
@@ -20,6 +20,7 @@ const slides = [
       'Год застройки',
       'Архитектурные особенности'
     ],
+    image: 'https://cdn.poehali.dev/projects/78c2aec8-8df9-45d7-9a38-ddffe41beb40/files/44f335ea-0f47-47ee-987b-93be0fd49c50.jpg',
     type: 'content'
   },
   {
@@ -49,6 +50,7 @@ const slides = [
       'Основал газету «Юманите»',
       'Убит накануне Первой мировой войны'
     ],
+    image: 'https://cdn.poehali.dev/projects/78c2aec8-8df9-45d7-9a38-ddffe41beb40/files/2bd5946f-bd17-418c-a90a-2723984ff09a.jpg',
     type: 'biography'
   },
   {
@@ -112,6 +114,19 @@ export default function Index() {
     }
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        prevSlide();
+      } else if (e.key === 'ArrowRight') {
+        nextSlide();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentSlide]);
+
   const slide = slides[currentSlide];
 
   return (
@@ -141,6 +156,15 @@ export default function Index() {
                   <h2 className="font-heading text-4xl font-bold text-[#2C2416] border-b-2 border-[#8B7355] pb-4">
                     {slide.title}
                   </h2>
+                  {slide.image && (
+                    <div className="border-4 border-[#8B7355] overflow-hidden">
+                      <img 
+                        src={slide.image} 
+                        alt={slide.title}
+                        className="w-full h-64 object-cover sepia"
+                      />
+                    </div>
+                  )}
                   <p className="font-body text-lg text-[#3E2723] leading-relaxed">
                     {slide.content}
                   </p>
@@ -204,6 +228,17 @@ export default function Index() {
                     </h2>
                     <p className="font-heading text-2xl text-[#654321]">{slide.years}</p>
                   </div>
+                  {slide.image && (
+                    <div className="flex justify-center">
+                      <div className="border-8 border-double border-[#8B7355] p-2 bg-[#E8DCC8]">
+                        <img 
+                          src={slide.image} 
+                          alt={slide.title}
+                          className="w-64 h-80 object-cover sepia"
+                        />
+                      </div>
+                    </div>
+                  )}
                   <p className="font-body text-lg text-[#3E2723] text-center italic">
                     {slide.content}
                   </p>
